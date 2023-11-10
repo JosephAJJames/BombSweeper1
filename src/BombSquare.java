@@ -1,6 +1,10 @@
 import java.util.Random;
 
 public class BombSquare extends GameSquare {
+	/**
+	 * Class for squares with bombs
+	 * @author Joseph James
+	 */
 	private boolean thisSquareHasBomb;
 	private boolean beenChecked = false;
 	private int numOfBombs;
@@ -9,12 +13,24 @@ public class BombSquare extends GameSquare {
 	public static final int MIN_BOMBS = 0;
 
 
+	/**
+	 * @param x x-axis position on GameBoard
+	 * @param y y-axis position on GameBoard
+	 * @param board GameBoard on which the grid appears
+	 */
 	public BombSquare(int x, int y, GameBoard board) {
 		super(x, y, "images/blank.png", board);
 		Random r = new Random();
 		thisSquareHasBomb = (r.nextInt(MINE_PROBABILITY) == 0);
 		numOfBombs = 0;
 	}
+
+	/**
+	 * @param x x-axis position on GameBoard
+	 * @param y y-axis position on GameBoard
+	 * @param board GameBoard on which the grid appears
+	 * @return returns true or false
+	 */
 
 	public boolean squareExists(int x, int y, GameBoard board){
 		if (board.getSquareAt(x, y) != null){
@@ -25,6 +41,9 @@ public class BombSquare extends GameSquare {
 		}
 	}
 
+	/**
+	 * @return returns number of bombs
+	 */
 	public int getNumOfBombs() {
 		return numOfBombs;
 	}
@@ -37,6 +56,9 @@ public class BombSquare extends GameSquare {
 		}
 	}
 
+	/**
+	 * @return returns number of bombs in the surrounding 3x3
+	 */
 	public int countAdjacentBombs() {
 		numOfBombs = 0;
 		for (int i = -1; i <= 1; i++) {
@@ -55,33 +77,46 @@ public class BombSquare extends GameSquare {
 		return numOfBombs;
 	}
 
+	/**
+	 * @return returns if the current square has bomb
+	 */
 	public Boolean hasBomb() {
 		return thisSquareHasBomb;
 	}
 
+	/**
+	 * @return has the current bomb been checked for containing a bomb
+	 */
 	public Boolean hasSet() {
 		return beenChecked;
 	}
 
+	/**
+	 * adds the number squares to the board
+	 */
 	public void outputBombCount() {
 		numOfBombs = countAdjacentBombs();
 		if (numOfBombs > MAX_BOMBS && numOfBombs < MIN_BOMBS){
-			//error check for invalid number of bombs
 			System.out.println("This is an invalid number of surrounding bombs");
 		}
 		else {
 			setImage("images/" + numOfBombs + ".png");
-			if (numOfBombs < 1) {	//already done a bounds check. checks if there are no surrounding bombs
-				clear3x3();			//recursive call
+			if (numOfBombs < 1) {
+				clear3x3();
 			}
 		}
 	}
 
+	/**
+	 * set current square to have been checked
+	 */
 	public void setbeenChecked() {
 		this.beenChecked = true;
 	}
 
-
+	/**
+	 * clears a 3x3 around the current square
+	 */
 	public void clear3x3() {
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
